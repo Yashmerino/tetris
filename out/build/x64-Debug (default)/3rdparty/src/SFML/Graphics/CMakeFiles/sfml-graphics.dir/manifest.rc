@@ -1,0 +1,2 @@
+#pragma code_page(65001)
+2 /* CREATEPROCESS_MANIFEST_RESOURCE_ID */ 24 /* RT_MANIFEST */ "A:/Developing/T-G/out/build/x64-Debug (default)/3rdparty/src/SFML/Graphics/CMakeFiles/sfml-graphics.dir/embed.manifest"
