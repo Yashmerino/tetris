@@ -8,7 +8,7 @@ project ("T-G")
 add_subdirectory ("3rdparty")
 
 # Add source to this project's executable.
-add_executable (T-G "Main.cpp")
+add_executable (T-G "Main.cpp" "src/Tetris.cpp")
 
 target_link_libraries (T-G sfml-audio sfml-graphics sfml-window sfml-system sfml-main)
 
