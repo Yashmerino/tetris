@@ -32,6 +32,11 @@ private:
 		{1, 2, 3, 4},
 		{0, 2, 3, 4},
 	};
+
+	struct Point //Creatting figures
+	{
+		int x, y;
+	} a[4], b[4];
 };
 
 #endif
