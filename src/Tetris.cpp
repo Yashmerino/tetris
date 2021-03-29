@@ -3,6 +3,8 @@
 
 Tetris::Tetris()
 {
+    tiles.loadFromFile("img/tiles.png");
+    figure.setTexture(tiles);
 
 }
 
@@ -25,6 +27,9 @@ void Tetris::run()
         }
 
         window.clear();
+
+        window.draw(figure);
+        
         window.display();
     }
 }
