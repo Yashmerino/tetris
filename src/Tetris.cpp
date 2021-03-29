@@ -19,10 +19,19 @@ void Tetris::run()
 
     int dx = 0; //Horizontal movement
     bool rotate = false; //Rotation
-    bool beginGame = true;
+
+    bool beginGame = true; //Start of the game
+
+    float timer = 0.0f;
+    float delay = 0.6f;
+    sf::Clock clock;
 
     while (window.isOpen())
     {
+        float time = clock.getElapsedTime().asSeconds();
+        clock.restart();
+        timer += time;
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -40,7 +49,7 @@ void Tetris::run()
 
         int n = 4;
 
-        if (beginGame) //If it's the beginning of the game
+        if (beginGame) //If it's the first figure spawned
         {
             beginGame = false; //After game starts changing beginGame variable's value
 
@@ -51,9 +60,15 @@ void Tetris::run()
             }
         }
 
-        for (int i = 0; i < 4; i++) //Moving figure in dependence of dx variable
-        {
+        for (int i = 0; i < 4; i++) //Horizontal movement
             a[i].x += dx;
+
+        if (timer > delay) //Vertical movement
+        {
+            timer = 0;
+
+            for (int i = 0; i < 4; i++)
+                a[i].y += 1;
         }
 
         window.clear(sf::Color::White);
