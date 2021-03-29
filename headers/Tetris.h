@@ -21,7 +21,7 @@ private:
 	static const int HEIGHT = 20; //Height and width for the field
 	static const int WIDTH = 10;
 
-	int field[WIDTH][HEIGHT] = {0}; //Initializing field
+	int field[HEIGHT][WIDTH] = {0}; //Initializing field
 
 private:
 	int figures[7][4] //Initializing figures

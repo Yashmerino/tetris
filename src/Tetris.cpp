@@ -1,5 +1,6 @@
 #include "../headers/Tetris.h"
 #include <SFML/Graphics.hpp>
+#include <ctime>
 
 Tetris::Tetris()
 {
@@ -18,7 +19,7 @@ bool Tetris::checkBounds() //Checks if the figure is not out of bounds
     for (int i = 0; i < 4; i++)
         if (a[i].x >= WIDTH || a[i].x < 0 || a[i].y >= HEIGHT)
             return false;
-        else if (field[b[i].x][b[i].y])
+        else if (field[a[i].y][a[i].x])
             return false;
 
     return true;
@@ -26,12 +27,16 @@ bool Tetris::checkBounds() //Checks if the figure is not out of bounds
 
 void Tetris::run()
 {
+    srand(time(NULL));
+
     sf::RenderWindow window(sf::VideoMode(480, 640), "Tetris"); //Creatting window
 
     int dx = 0; //Horizontal movement
     bool rotate = false; //Rotation
 
     bool beginGame = true; //Start of the game
+
+    int colorNum = 1 + rand() % 3;
 
     float timer = 0.0f;
     float delay = 0.6f;
@@ -60,11 +65,11 @@ void Tetris::run()
                     delay = 0.02f;
         }
 
-        int n = 4;
-
         if (beginGame) //If it's the first figure spawned
         {
             beginGame = false; //After game starts changing beginGame variable's value
+
+            int n = rand() % 7;
 
             for (int i = 0; i < 4; i++) //Constructing the chosen figure and choosing it's position (n variable)
             {
@@ -86,8 +91,6 @@ void Tetris::run()
 
         if (timer > delay) //Vertical movement
         {
-            timer = 0; //Resetting timer value
-
             for (int i = 0; i < 4; i++)
             {
                 b[i] = a[i];
@@ -95,9 +98,23 @@ void Tetris::run()
                 a[i].y += 1;
             }
 
+
             if (!checkBounds()) //Checking if figure isn't out of bounds on Y coordinate
+            {
                 for (int i = 0; i < 4; i++)
-                    a[i] = b[i];
+                    field[b[i].y][b[i].x] = colorNum;
+
+                colorNum = 1 + rand() % 3;
+                int n = rand() % 7;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    a[i].x = figures[n][i] % 2;
+                    a[i].y = figures[n][i] / 2;
+                }
+            }
+
+            timer = 0; //Resetting timer value
         }
 
         if (rotate)
@@ -119,18 +136,30 @@ void Tetris::run()
                     a[i] = b[i];
         }
 
-        window.clear(sf::Color::White);
-
-        for (int i = 0; i < 4; i++) //Drawing the figure
-        {
-            figure.setPosition(a[i].x * 30, a[i].y * 30);
-            window.draw(figure);
-        }
-        
         dx = 0; //Resetting horizontal movement variable
         rotate = false; //Resetting rotation variable
         delay = 0.6f; //Resetting fall speed
 
+        window.clear(sf::Color::White);
+        
+        for (int i = 0; i < HEIGHT; i++)
+            for (int j = 0; j < WIDTH; j++)
+            {
+                if (field[i][j] == 0)
+                    continue;
+
+                figure.setTextureRect(sf::IntRect(field[i][j] * 30, 0, 30, 30));
+                figure.setPosition(j * 30, i * 30);
+                window.draw(figure);
+            }
+
+        for (int i = 0; i < 4; i++) //Drawing the figure
+        {
+            figure.setTextureRect(sf::IntRect(colorNum * 30, 0, 30, 30));
+            figure.setPosition(a[i].x * 30, a[i].y * 30);
+            window.draw(figure);
+        }
+     
         window.display();
     }
 }
