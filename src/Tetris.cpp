@@ -136,6 +136,18 @@ void Tetris::run()
                     a[i] = b[i];
         }
 
+        int k = HEIGHT - 1; //Checks if the line is full and removing it if it's true
+        for (int i = HEIGHT - 1; i > 0; i--)
+        {
+            int count = 0;
+            for (int j = 0; j < WIDTH; j++)
+            {
+                if (field[i][j]) count++;
+                field[k][j] = field[i][j];
+            }
+            if (count < WIDTH) k--;
+        }
+
         dx = 0; //Resetting horizontal movement variable
         rotate = false; //Resetting rotation variable
         delay = 0.6f; //Resetting fall speed
