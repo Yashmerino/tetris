@@ -13,6 +13,17 @@ Tetris::~Tetris()
 
 }
 
+bool Tetris::checkBounds() //Checks if the figure is not out of bounds
+{
+    for (int i = 0; i < 4; i++)
+        if (a[i].x >= WIDTH || a[i].x < 0 || a[i].y >= HEIGHT)
+            return false;
+        else if (field[b[i].x][b[i].y])
+            return false;
+
+    return true;
+}
+
 void Tetris::run()
 {
     sf::RenderWindow window(sf::VideoMode(480, 640), "Tetris"); //Creatting window
@@ -45,6 +56,8 @@ void Tetris::run()
                     dx -= 1;
                 else if (event.key.code == sf::Keyboard::Right) //Move to the right
                     dx += 1;
+                else if (event.key.code == sf::Keyboard::Down) //Increase the fall speed
+                    delay = 0.02f;
         }
 
         int n = 4;
@@ -61,14 +74,49 @@ void Tetris::run()
         }
 
         for (int i = 0; i < 4; i++) //Horizontal movement
+        {
+            b[i] = a[i];
+
             a[i].x += dx;
+        }
+
+        if (!checkBounds()) //Checking if figure isn't out of bounds on X coordinate
+            for (int i = 0; i < 4; i++)
+                a[i] = b[i];
 
         if (timer > delay) //Vertical movement
         {
-            timer = 0;
+            timer = 0; //Resetting timer value
 
             for (int i = 0; i < 4; i++)
+            {
+                b[i] = a[i];
+
                 a[i].y += 1;
+            }
+
+            if (!checkBounds()) //Checking if figure isn't out of bounds on Y coordinate
+                for (int i = 0; i < 4; i++)
+                    a[i] = b[i];
+        }
+
+        if (rotate)
+        {
+            Point temp = a[1];
+
+            for (int i = 0; i < 4; i++)
+            {
+                b[i] = a[i];
+
+                int x = a[i].y - temp.y;
+                int y = a[i].x - temp.x;
+                a[i].x = temp.x - x;
+                a[i].y = temp.y + y;
+            }
+
+            if (!checkBounds()) //Checking if figure isn't out of bounds after rotating it
+                for (int i = 0; i < 4; i++)
+                    a[i] = b[i];
         }
 
         window.clear(sf::Color::White);
@@ -81,6 +129,7 @@ void Tetris::run()
         
         dx = 0; //Resetting horizontal movement variable
         rotate = false; //Resetting rotation variable
+        delay = 0.6f; //Resetting fall speed
 
         window.display();
     }

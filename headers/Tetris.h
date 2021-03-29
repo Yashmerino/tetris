@@ -9,6 +9,8 @@ public:
 
 	~Tetris();
 
+	bool checkBounds();
+
 	void run();
 
 private:
