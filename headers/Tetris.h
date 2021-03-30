@@ -13,7 +13,7 @@ public:
 
 	bool checkHover(sf::Sprite& sprite, sf::RenderWindow& window);
 
-	void resetGame(bool& beginGame, bool& gameOver, int& score);
+	void resetGame(bool& beginGame, bool& gameOver, int& score, int& colorNum);
 
 	void checkifGameOver(bool& gameOver);
 
@@ -44,7 +44,7 @@ private:
 	struct Point //Creatting figures
 	{
 		int x, y;
-	} a[4], b[4];
+	} a[4], b[4], temp[4];
 
 private:
 	sf::Texture backgroundTexture;

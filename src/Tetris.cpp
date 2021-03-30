@@ -57,7 +57,7 @@ bool Tetris::checkHover(sf::Sprite& sprite, sf::RenderWindow& window) //Checks i
     return bounds.contains(mousePos);
 }
 
-void Tetris::resetGame(bool& beginGame, bool& gameOver, int& score)
+void Tetris::resetGame(bool& beginGame, bool& gameOver, int& score, int& colorNum)
 {
     for (int i = 0; i < HEIGHT; i++)
         for (int j = 0; j < WIDTH; j++)
@@ -65,6 +65,7 @@ void Tetris::resetGame(bool& beginGame, bool& gameOver, int& score)
 
     beginGame = true;
     gameOver = false;
+    colorNum = 1 + rand() % 3;
 
     score = 0;
     scoreText.setString(std::to_string(score));
@@ -138,7 +139,7 @@ void Tetris::run()
                 buttons[1].setTexture(buttonsTextures[2]);
 
             if (event.type == sf::Event::MouseButtonPressed && checkHover(buttons[0], window)) //Reset game if reset button pressed
-                resetGame(beginGame, gameOver, score);
+                resetGame(beginGame, gameOver, score, colorNum);
             else if (event.type == sf::Event::MouseButtonPressed && checkHover(buttons[1], window))  //Exit if exit button pressed
                 window.close();
         }
