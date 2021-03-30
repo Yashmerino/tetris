@@ -13,7 +13,7 @@ public:
 
 	bool checkHover(sf::Sprite& sprite, sf::RenderWindow& window);
 
-	void resetGame(bool& beginGame);
+	void resetGame(bool& beginGame, int& score);
 
 	void run();
 
@@ -50,6 +50,10 @@ private:
 
 	sf::Texture buttonsTextures[4];
 	sf::Sprite buttons[2];
+
+private:
+	sf::Font font;
+	sf::Text scoreText;
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include "../headers/Tetris.h"
 #include <SFML/Graphics.hpp>
 #include <ctime>
+#include <string>
 
 Tetris::Tetris()
 {
@@ -21,6 +22,15 @@ Tetris::Tetris()
 
     buttons[0].setPosition(360.f, 525.f); //Setting buttons' positions
     buttons[1].setPosition(410.f, 495.f);
+
+    font.loadFromFile("fonts/ac.ttf");
+
+    scoreText.setFont(font);
+    scoreText.setString("0");
+    scoreText.setColor(sf::Color::Black);
+    scoreText.setCharacterSize(36.f);
+    scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
+    scoreText.setPosition(400.f, 75.f);
 }
 
 Tetris::~Tetris()
@@ -47,13 +57,18 @@ bool Tetris::checkHover(sf::Sprite& sprite, sf::RenderWindow& window) //Checks i
     return bounds.contains(mousePos);
 }
 
-void Tetris::resetGame(bool& beginGame)
+void Tetris::resetGame(bool& beginGame, int& score)
 {
     for (int i = 0; i < HEIGHT; i++)
         for (int j = 0; j < WIDTH; j++)
             field[i][j] = 0;
 
     beginGame = true;
+
+    score = 0;
+    scoreText.setString(std::to_string(score));
+    scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
+    scoreText.setPosition(400.f, 75.f);
 }
 
 void Tetris::run()
@@ -68,6 +83,7 @@ void Tetris::run()
     bool beginGame = true; //Start of the game
 
     int colorNum = 1 + rand() % 3;
+    int score = 0;
 
     float timer = 0.0f;
     float delay = 0.6f;
@@ -105,7 +121,7 @@ void Tetris::run()
                 buttons[1].setTexture(buttonsTextures[2]);
 
             if (event.type == sf::Event::MouseButtonPressed && checkHover(buttons[0], window)) //Reset game if reset button pressed
-                resetGame(beginGame);
+                resetGame(beginGame, score);
             else if (event.type == sf::Event::MouseButtonPressed && checkHover(buttons[1], window))  //Exit if exit button pressed
                 window.close();
         }
@@ -191,6 +207,13 @@ void Tetris::run()
                 field[k][j] = field[i][j];
             }
             if (count < WIDTH) k--;
+            else
+            {
+                score += 100;
+                scoreText.setString(std::to_string(score));
+                scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
+                scoreText.setPosition(400.f, 75.f);
+            }
         }
 
         dx = 0; //Resetting horizontal movement variable
@@ -199,6 +222,7 @@ void Tetris::run()
 
         window.clear(sf::Color::White);
         window.draw(background);
+        window.draw(scoreText);
         for (int i = 0; i < 2; i++)
             window.draw(buttons[i]);
 
