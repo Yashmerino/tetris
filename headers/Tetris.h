@@ -44,7 +44,7 @@ private:
 	struct Point //Creatting figures
 	{
 		int x, y;
-	} a[4], b[4], temp[4];
+	} a[4], b[4], next[4];
 
 private:
 	sf::Texture backgroundTexture;

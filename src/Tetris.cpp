@@ -28,9 +28,9 @@ Tetris::Tetris()
     scoreText.setFont(font);
     scoreText.setString("0");
     scoreText.setColor(sf::Color::Black);
-    scoreText.setCharacterSize(36.f);
+    scoreText.setCharacterSize(42.f);
     scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
-    scoreText.setPosition(400.f, 75.f);
+    scoreText.setPosition(400.f, 76.f);
 }
 
 Tetris::~Tetris()
@@ -102,6 +102,8 @@ void Tetris::run()
 
     int colorNum = 1 + rand() % 3;
     int score = 0;
+    int nextN = 0;
+    int nextColorNum = 0;
 
     float timer = 0.0f;
     float delay = 0.6f;
@@ -149,11 +151,16 @@ void Tetris::run()
             beginGame = false; //After game starts changing beginGame variable's value
 
             int n = rand() % 7;
+            nextN = rand() % 7;
+            nextColorNum = 1 + rand() % 3;
 
             for (int i = 0; i < 4; i++) //Constructing the chosen figure and choosing it's position (n variable)
             {
                 a[i].x = figures[n][i] % 2;
                 a[i].y = figures[n][i] / 2;
+
+                next[i].x = figures[nextN][i] % 2;
+                next[i].y = figures[nextN][i] / 2;
             }
         }
 
@@ -187,13 +194,18 @@ void Tetris::run()
 
                 if (!gameOver)
                 {
-                    colorNum = 1 + rand() % 3;
-                    int n = rand() % 7;
+                    colorNum = nextColorNum;
+                    nextColorNum = 1 + rand() % 3;
+                    int n = nextN;
+                    nextN = rand() % 7;
 
                     for (int i = 0; i < 4; i++)
                     {  
                         a[i].x = figures[n][i] % 2;
                         a[i].y = figures[n][i] / 2;
+
+                        next[i].x = figures[nextN][i] % 2;
+                        next[i].y = figures[nextN][i] / 2;
                     }
                 }
 
@@ -264,6 +276,14 @@ void Tetris::run()
                 figure.move(21.f, 20.f);
                 window.draw(figure);
             }
+
+        for (int i = 0; i < 4; i++) //Drawing the next figure
+        {
+            figure.setTextureRect(sf::IntRect(nextColorNum * 30, 0, 30, 30));
+            figure.setPosition(next[i].x * 30, next[i].y * 30);
+            figure.move(374.f, 182.f);
+            window.draw(figure);
+        }
 
         if(!gameOver)
         for (int i = 0; i < 4; i++) //Drawing the figure
