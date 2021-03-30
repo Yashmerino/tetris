@@ -47,6 +47,15 @@ bool Tetris::checkHover(sf::Sprite& sprite, sf::RenderWindow& window) //Checks i
     return bounds.contains(mousePos);
 }
 
+void Tetris::resetGame(bool& beginGame)
+{
+    for (int i = 0; i < HEIGHT; i++)
+        for (int j = 0; j < WIDTH; j++)
+            field[i][j] = 0;
+
+    beginGame = true;
+}
+
 void Tetris::run()
 {
     srand(time(NULL));
@@ -94,6 +103,11 @@ void Tetris::run()
                 buttons[1].setTexture(buttonsTextures[3]);
             else
                 buttons[1].setTexture(buttonsTextures[2]);
+
+            if (event.type == sf::Event::MouseButtonPressed && checkHover(buttons[0], window)) //Reset game if reset button pressed
+                resetGame(beginGame);
+            else if (event.type == sf::Event::MouseButtonPressed && checkHover(buttons[1], window))  //Exit if exit button pressed
+                window.close();
         }
 
         if (beginGame) //If it's the first figure spawned
@@ -148,11 +162,11 @@ void Tetris::run()
             timer = 0; //Resetting timer value
         }
 
-        if (rotate)
+        if (rotate) //Rotation
         {
             Point temp = a[1];
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++) //Some very hard math formula
             {
                 b[i] = a[i];
 

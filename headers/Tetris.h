@@ -13,6 +13,8 @@ public:
 
 	bool checkHover(sf::Sprite& sprite, sf::RenderWindow& window);
 
+	void resetGame(bool& beginGame);
+
 	void run();
 
 private:
