@@ -30,7 +30,7 @@ Tetris::Tetris()
     scoreText.setColor(sf::Color::Black);
     scoreText.setCharacterSize(42.f);
     scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
-    scoreText.setPosition(400.f, 76.f);
+    scoreText.setPosition(400.f, 77.f);
 }
 
 Tetris::~Tetris()
@@ -70,7 +70,7 @@ void Tetris::resetGame(bool& beginGame, bool& gameOver, int& score, int& colorNu
     score = 0;
     scoreText.setString(std::to_string(score));
     scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
-    scoreText.setPosition(400.f, 75.f);
+    scoreText.setPosition(400.f, 77.f);
 }
 
 void Tetris::checkifGameOver(bool& gameOver)
@@ -251,7 +251,7 @@ void Tetris::run()
                 score += 100;
                 scoreText.setString(std::to_string(score));
                 scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
-                scoreText.setPosition(400.f, 75.f);
+                scoreText.setPosition(400.f, 77.f);
             }
         }
 
