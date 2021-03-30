@@ -8,8 +8,19 @@ Tetris::Tetris()
     figure.setTexture(tiles);
     figure.setTextureRect(sf::IntRect(60, 0, 30, 30));
 
-    backgroundTexture.loadFromFile("img/main.png");
+    backgroundTexture.loadFromFile("img/main.png"); //Loading and setting background
     background.setTexture(backgroundTexture);
+
+    buttonsTextures[0].loadFromFile("img/new.png"); //Loading and setting butons
+    buttonsTextures[1].loadFromFile("img/newHover.png");
+    buttonsTextures[2].loadFromFile("img/exit.png");
+    buttonsTextures[3].loadFromFile("img/exitHover.png");
+
+    buttons[0].setTexture(buttonsTextures[0]);
+    buttons[1].setTexture(buttonsTextures[2]);
+
+    buttons[0].setPosition(360.f, 525.f); //Setting buttons' positions
+    buttons[1].setPosition(410.f, 495.f);
 }
 
 Tetris::~Tetris()
@@ -26,6 +37,14 @@ bool Tetris::checkBounds() //Checks if the figure is not out of bounds
             return false;
 
     return true;
+}
+
+bool Tetris::checkHover(sf::Sprite& sprite, sf::RenderWindow& window) //Checks if the mouse is hovering a sprite
+{
+    sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    sf::FloatRect bounds = sprite.getGlobalBounds();
+
+    return bounds.contains(mousePos);
 }
 
 void Tetris::run()
@@ -66,6 +85,15 @@ void Tetris::run()
                     dx += 1;
                 else if (event.key.code == sf::Keyboard::Down) //Increase the fall speed
                     delay = 0.02f;
+
+            if (event.type == sf::Event::MouseMoved && checkHover(buttons[0], window)) //If new button hovered
+                buttons[0].setTexture(buttonsTextures[1]);
+            else
+                buttons[0].setTexture(buttonsTextures[0]);
+            if (event.type == sf::Event::MouseMoved && checkHover(buttons[1], window)) //If exit button hovered
+                buttons[1].setTexture(buttonsTextures[3]);
+            else
+                buttons[1].setTexture(buttonsTextures[2]);
         }
 
         if (beginGame) //If it's the first figure spawned
@@ -157,8 +185,10 @@ void Tetris::run()
 
         window.clear(sf::Color::White);
         window.draw(background);
+        for (int i = 0; i < 2; i++)
+            window.draw(buttons[i]);
 
-        for (int i = 0; i < HEIGHT; i++)
+        for (int i = 0; i < HEIGHT; i++) //Drawing the figures that are already setted
             for (int j = 0; j < WIDTH; j++)
             {
                 if (field[i][j] == 0)

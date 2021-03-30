@@ -11,6 +11,8 @@ public:
 
 	bool checkBounds();
 
+	bool checkHover(sf::Sprite& sprite, sf::RenderWindow& window);
+
 	void run();
 
 private:
@@ -43,6 +45,9 @@ private:
 private:
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
+
+	sf::Texture buttonsTextures[4];
+	sf::Sprite buttons[2];
 };
 
 #endif
