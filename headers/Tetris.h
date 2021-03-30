@@ -13,7 +13,9 @@ public:
 
 	bool checkHover(sf::Sprite& sprite, sf::RenderWindow& window);
 
-	void resetGame(bool& beginGame, int& score);
+	void resetGame(bool& beginGame, bool& gameOver, int& score);
+
+	void checkifGameOver(bool& gameOver);
 
 	void run();
 

@@ -57,18 +57,34 @@ bool Tetris::checkHover(sf::Sprite& sprite, sf::RenderWindow& window) //Checks i
     return bounds.contains(mousePos);
 }
 
-void Tetris::resetGame(bool& beginGame, int& score)
+void Tetris::resetGame(bool& beginGame, bool& gameOver, int& score)
 {
     for (int i = 0; i < HEIGHT; i++)
         for (int j = 0; j < WIDTH; j++)
             field[i][j] = 0;
 
     beginGame = true;
+    gameOver = false;
 
     score = 0;
     scoreText.setString(std::to_string(score));
     scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
     scoreText.setPosition(400.f, 75.f);
+}
+
+void Tetris::checkifGameOver(bool& gameOver)
+{
+    for (int i = 0; i < WIDTH; i++)
+        if (field[1][i])
+        {
+            gameOver = true;
+            break;
+        }
+        else
+        {
+            gameOver = false;
+            break;
+        }
 }
 
 void Tetris::run()
@@ -81,6 +97,7 @@ void Tetris::run()
     bool rotate = false; //Rotation
 
     bool beginGame = true; //Start of the game
+    bool gameOver = false;
 
     int colorNum = 1 + rand() % 3;
     int score = 0;
@@ -121,7 +138,7 @@ void Tetris::run()
                 buttons[1].setTexture(buttonsTextures[2]);
 
             if (event.type == sf::Event::MouseButtonPressed && checkHover(buttons[0], window)) //Reset game if reset button pressed
-                resetGame(beginGame, score);
+                resetGame(beginGame, gameOver, score);
             else if (event.type == sf::Event::MouseButtonPressed && checkHover(buttons[1], window))  //Exit if exit button pressed
                 window.close();
         }
@@ -139,6 +156,7 @@ void Tetris::run()
             }
         }
 
+        if(!gameOver)
         for (int i = 0; i < 4; i++) //Horizontal movement
         {
             b[i] = a[i];
@@ -146,11 +164,11 @@ void Tetris::run()
             a[i].x += dx;
         }
 
-        if (!checkBounds()) //Checking if figure isn't out of bounds on X coordinate
+        if (!checkBounds() && !gameOver) //Checking if figure isn't out of bounds on X coordinate
             for (int i = 0; i < 4; i++)
                 a[i] = b[i];
 
-        if (timer > delay) //Vertical movement
+        if (timer > delay && !gameOver) //Vertical movement
         {
             for (int i = 0; i < 4; i++)
             {
@@ -159,26 +177,34 @@ void Tetris::run()
                 a[i].y += 1;
             }
 
-
             if (!checkBounds()) //Checking if figure isn't out of bounds on Y coordinate
             {
                 for (int i = 0; i < 4; i++)
                     field[b[i].y][b[i].x] = colorNum;
 
-                colorNum = 1 + rand() % 3;
-                int n = rand() % 7;
+                checkifGameOver(gameOver);
+
+                if (!gameOver)
+                {
+                    colorNum = 1 + rand() % 3;
+                    int n = rand() % 7;
+
+                    for (int i = 0; i < 4; i++)
+                    {  
+                        a[i].x = figures[n][i] % 2;
+                        a[i].y = figures[n][i] / 2;
+                    }
+                }
 
                 for (int i = 0; i < 4; i++)
-                {
-                    a[i].x = figures[n][i] % 2;
-                    a[i].y = figures[n][i] / 2;
-                }
+                    if (field[a[i].y][a[i].x] != 0)
+                        gameOver = true;
             }
 
             timer = 0; //Resetting timer value
         }
 
-        if (rotate) //Rotation
+        if (rotate && !gameOver) //Rotation
         {
             Point temp = a[1];
 
@@ -238,6 +264,7 @@ void Tetris::run()
                 window.draw(figure);
             }
 
+        if(!gameOver)
         for (int i = 0; i < 4; i++) //Drawing the figure
         {
             figure.setTextureRect(sf::IntRect(colorNum * 30, 0, 30, 30));
