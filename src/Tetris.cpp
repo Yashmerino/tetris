@@ -7,6 +7,9 @@ Tetris::Tetris()
     tiles.loadFromFile("img/tiles.png"); //Loading and setting tiles
     figure.setTexture(tiles);
     figure.setTextureRect(sf::IntRect(60, 0, 30, 30));
+
+    backgroundTexture.loadFromFile("img/main.png");
+    background.setTexture(backgroundTexture);
 }
 
 Tetris::~Tetris()
@@ -153,7 +156,8 @@ void Tetris::run()
         delay = 0.6f; //Resetting fall speed
 
         window.clear(sf::Color::White);
-        
+        window.draw(background);
+
         for (int i = 0; i < HEIGHT; i++)
             for (int j = 0; j < WIDTH; j++)
             {
@@ -162,6 +166,7 @@ void Tetris::run()
 
                 figure.setTextureRect(sf::IntRect(field[i][j] * 30, 0, 30, 30));
                 figure.setPosition(j * 30, i * 30);
+                figure.move(21.f, 20.f);
                 window.draw(figure);
             }
 
@@ -169,6 +174,7 @@ void Tetris::run()
         {
             figure.setTextureRect(sf::IntRect(colorNum * 30, 0, 30, 30));
             figure.setPosition(a[i].x * 30, a[i].y * 30);
+            figure.move(21.f, 20.f);
             window.draw(figure);
         }
      

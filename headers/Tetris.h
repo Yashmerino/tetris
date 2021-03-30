@@ -39,6 +39,10 @@ private:
 	{
 		int x, y;
 	} a[4], b[4];
+
+private:
+	sf::Texture backgroundTexture;
+	sf::Sprite background;
 };
 
 #endif
