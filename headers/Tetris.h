@@ -1,6 +1,7 @@
 #ifndef _TETRIS_H_
 #define _TETRIS_H_
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 class Tetris
 {
@@ -56,6 +57,11 @@ private:
 private:
 	sf::Font font;
 	sf::Text scoreText;
+
+private:
+	sf::Music music;
+	sf::SoundBuffer sounds[4];
+	sf::Sound audio;
 };
 
 #endif

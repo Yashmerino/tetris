@@ -12,7 +12,7 @@ Tetris::Tetris()
     backgroundTexture.loadFromFile("img/main.png"); //Loading and setting background
     background.setTexture(backgroundTexture);
 
-    buttonsTextures[0].loadFromFile("img/new.png"); //Loading and setting butons
+    buttonsTextures[0].loadFromFile("img/new.png"); //Loading and setting buttons
     buttonsTextures[1].loadFromFile("img/newHover.png");
     buttonsTextures[2].loadFromFile("img/exit.png");
     buttonsTextures[3].loadFromFile("img/exitHover.png");
@@ -23,14 +23,22 @@ Tetris::Tetris()
     buttons[0].setPosition(360.f, 525.f); //Setting buttons' positions
     buttons[1].setPosition(410.f, 495.f);
 
-    font.loadFromFile("fonts/ac.ttf");
+    font.loadFromFile("fonts/ac.ttf"); //Loading the font
 
-    scoreText.setFont(font);
+    scoreText.setFont(font); //Setting score text
     scoreText.setString("0");
     scoreText.setColor(sf::Color::Black);
     scoreText.setCharacterSize(42.f);
     scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
     scoreText.setPosition(400.f, 77.f);
+
+    music.openFromFile("audio/music.wav"); //Setting music
+    music.setLoop(true);
+    
+    sounds[0].loadFromFile("audio/fall.wav"); //Setting sound effects
+    sounds[1].loadFromFile("audio/rotate.wav");
+    sounds[2].loadFromFile("audio/line.wav");
+    sounds[3].loadFromFile("audio/finish.wav");
 }
 
 Tetris::~Tetris()
@@ -71,6 +79,9 @@ void Tetris::resetGame(bool& beginGame, bool& gameOver, int& score, int& colorNu
     scoreText.setString(std::to_string(score));
     scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
     scoreText.setPosition(400.f, 77.f);
+
+    music.openFromFile("audio/music.wav");
+    music.play();
 }
 
 void Tetris::checkifGameOver(bool& gameOver)
@@ -79,6 +90,9 @@ void Tetris::checkifGameOver(bool& gameOver)
         if (field[1][i])
         {
             gameOver = true;
+            music.pause();
+            audio.setBuffer(sounds[3]);
+            audio.play();
             break;
         }
         else
@@ -91,6 +105,8 @@ void Tetris::checkifGameOver(bool& gameOver)
 void Tetris::run()
 {
     srand(time(NULL));
+
+    music.play();
 
     sf::RenderWindow window(sf::VideoMode(480, 640), "Tetris"); //Creatting window
 
@@ -187,6 +203,9 @@ void Tetris::run()
 
             if (!checkBounds()) //Checking if figure isn't out of bounds on Y coordinate
             {
+                audio.setBuffer(sounds[0]);
+                audio.play();
+
                 for (int i = 0; i < 4; i++)
                     field[b[i].y][b[i].x] = colorNum;
 
@@ -211,7 +230,12 @@ void Tetris::run()
 
                 for (int i = 0; i < 4; i++)
                     if (field[a[i].y][a[i].x] != 0)
+                    {
+                        music.pause();
+                        audio.setBuffer(sounds[3]);
+                        audio.play();
                         gameOver = true;
+                    }
             }
 
             timer = 0; //Resetting timer value
@@ -219,6 +243,9 @@ void Tetris::run()
 
         if (rotate && !gameOver) //Rotation
         {
+            audio.setBuffer(sounds[1]);
+            audio.play();
+
             Point temp = a[1];
 
             for (int i = 0; i < 4; i++) //Some very hard math formula
@@ -248,6 +275,9 @@ void Tetris::run()
             if (count < WIDTH) k--;
             else
             {
+                audio.setBuffer(sounds[2]);
+                audio.play();
+
                 score += 100;
                 scoreText.setString(std::to_string(score));
                 scoreText.setOrigin(sf::Vector2f(scoreText.getLocalBounds().width / 2, scoreText.getLocalBounds().height / 2));
