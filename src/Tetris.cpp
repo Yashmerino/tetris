@@ -87,7 +87,7 @@ void Tetris::resetGame(bool& beginGame, bool& gameOver, int& score, int& colorNu
 void Tetris::checkifGameOver(bool& gameOver)
 {
     for (int i = 0; i < WIDTH; i++)
-        if (field[1][i])
+        if (field[0][i])
         {
             gameOver = true;
             music.pause();
@@ -108,7 +108,7 @@ void Tetris::run()
 
     music.play();
 
-    sf::RenderWindow window(sf::VideoMode(480, 640), "Tetris"); //Creatting window
+    sf::RenderWindow window(sf::VideoMode(480, 640), "Tetris", sf::Style::Close); //Creatting window
 
     int dx = 0; //Horizontal movement
     bool rotate = false; //Rotation
@@ -315,9 +315,11 @@ void Tetris::run()
             window.draw(figure);
         }
 
-        if(!gameOver)
         for (int i = 0; i < 4; i++) //Drawing the figure
         {
+            if (field[0][i])
+                a[i].y -= 3;
+
             figure.setTextureRect(sf::IntRect(colorNum * 30, 0, 30, 30));
             figure.setPosition(a[i].x * 30, a[i].y * 30);
             figure.move(21.f, 20.f);
