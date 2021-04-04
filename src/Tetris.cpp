@@ -317,9 +317,6 @@ void Tetris::run()
 
         for (int i = 0; i < 4; i++) //Drawing the figure
         {
-            if (field[0][i])
-                a[i].y -= 3;
-
             figure.setTextureRect(sf::IntRect(colorNum * 30, 0, 30, 30));
             figure.setPosition(a[i].x * 30, a[i].y * 30);
             figure.move(21.f, 20.f);
