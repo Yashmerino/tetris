@@ -10,4 +10,4 @@
 * Right-click the zipped folder saved to your computer and choose "Extract All". Run the application and enjoy!
 
 <h1 align="center"><strong>Demonstration</strong></h1>
-<p align="center"><img src="demo.png" alt="Tetris logo" height=440 width=300></p>
+<p align="center"><img src="demo.png" height=440 width=300></p>
