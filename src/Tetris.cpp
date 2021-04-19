@@ -118,7 +118,8 @@ void Tetris::run()
 
     int colorNum = 1 + rand() % 3;
     int score = 0;
-    int nextN = 0;
+    int currentFigure = 0;
+    int nextFigure = 0;
     int nextColorNum = 0;
 
     float timer = 0.0f;
@@ -166,17 +167,17 @@ void Tetris::run()
         {
             beginGame = false; //After game starts changing beginGame variable's value
 
-            int n = rand() % 7;
-            nextN = rand() % 7;
+            currentFigure = rand() % 7;
+            nextFigure = rand() % 7;
             nextColorNum = 1 + rand() % 3;
 
             for (int i = 0; i < 4; i++) //Constructing the chosen figure and choosing it's position (n variable)
             {
-                a[i].x = figures[n][i] % 2;
-                a[i].y = figures[n][i] / 2;
+                a[i].x = figures[currentFigure][i] % 2;
+                a[i].y = figures[currentFigure][i] / 2;
 
-                next[i].x = figures[nextN][i] % 2;
-                next[i].y = figures[nextN][i] / 2;
+                next[i].x = figures[nextFigure][i] % 2;
+                next[i].y = figures[nextFigure][i] / 2;
             }
         }
 
@@ -215,16 +216,16 @@ void Tetris::run()
                 {
                     colorNum = nextColorNum;
                     nextColorNum = 1 + rand() % 3;
-                    int n = nextN;
-                    nextN = rand() % 7;
+                    currentFigure = nextFigure;
+                    nextFigure = rand() % 7;
 
                     for (int i = 0; i < 4; i++)
                     {  
-                        a[i].x = figures[n][i] % 2;
-                        a[i].y = figures[n][i] / 2;
+                        a[i].x = figures[currentFigure][i] % 2;
+                        a[i].y = figures[currentFigure][i] / 2;
 
-                        next[i].x = figures[nextN][i] % 2;
-                        next[i].y = figures[nextN][i] / 2;
+                        next[i].x = figures[nextFigure][i] % 2;
+                        next[i].y = figures[nextFigure][i] / 2;
                     }
                 }
 
@@ -241,7 +242,7 @@ void Tetris::run()
             timer = 0; //Resetting timer value
         }
 
-        if (rotate && !gameOver) //Rotation
+        if (rotate && !gameOver && currentFigure != 3) //Rotation
         {
             audio.setBuffer(sounds[1]);
             audio.play();
