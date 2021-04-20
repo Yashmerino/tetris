@@ -171,7 +171,7 @@ void Tetris::run()
             nextFigure = rand() % 7;
             nextColorNum = 1 + rand() % 3;
 
-            for (int i = 0; i < 4; i++) //Constructing the chosen figure and choosing it's position (n variable)
+            for (int i = 0; i < 4; i++) //Constructing the chosen figure and choosing it's position
             {
                 a[i].x = figures[currentFigure][i] % 2;
                 a[i].y = figures[currentFigure][i] / 2;
